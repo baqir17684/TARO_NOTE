@@ -1,0 +1,46 @@
+Taro-react笔记
+1. 路由跳转Taro.navigateTo
+父组件：
+import Taro from '@tarojs/taro'
+handleNavigate = () => {
+  Taro.navigateTo({
+    url: '/pages/detail/index?id=123&name=张三'
+  })
+}
+这里传递了两个参数id和name，可以使用模版字符串向url中添加变量
+
+子组件：
+import { useRouter } from '@tarojs/taro'
+const router = useRouter()；
+const { params } = router;
+params.id、params.name
+
+注意：通过URL传递的参数，在接收时都会被转换为字符串
+如果需要传递复杂的数据结构，可以考虑使用 JSON.stringify() 进行编码，然后在接收页面使用 JSON.parse() 解码
+（将js对象转换为JSON字符串）
+此外，URL只能使用ASCII字符集的一个子集。很多字符，如空格、引号、括号、百分号、以及非ASCII字符（如中文）等，在URL中都是非法的或有特殊含义的。如果直接使用这些字符，可能会导致URL解析错误或安全问题。
+encodeURIComponent() 函数可以将这些特殊字符转换为它们的URL编码形式。
+Taro.navigateTo({
+  url: `/pages/detail/index?data=${encodeURIComponent(JSON.stringify(complexData))}`
+})
+对应  const router = useRouter()
+  const dataString = router.params.data
+  const data = JSON.parse(decodeURIComponent(dataString))
+
+2.Taro.showToast
+Taro.showToast 是 Taro 框架提供的一个用于显示消息提示框的 API。这个功能在微信小程序、H5 等多端都有对应的实现。
+import Taro from '@tarojs/taro'
+
+Taro.showToast({
+  title: '操作成功',
+  icon: 'success',
+  duration: 2000
+})
+title（必填）: 提示的内容
+icon（选填）: 图标，有效值：'success', 'error', 'loading', 'none'
+image（选填）: 自定义图标的本地路径，image 的优先级高于 icon
+duration（选填）: 提示的延迟时间，单位毫秒，默认为 1500
+mask（选填）: 是否显示透明蒙层，防止触摸穿透，默认为 false
+success（选填）: 接口调用成功的回调函数
+fail（选填）: 接口调用失败的回调函数
+complete（选填）: 接口调用结束的回调函数（调用成功、失败都会执行）
