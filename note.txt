@@ -44,3 +44,17 @@ mask（选填）: 是否显示透明蒙层，防止触摸穿透，默认为 fals
 success（选填）: 接口调用成功的回调函数
 fail（选填）: 接口调用失败的回调函数
 complete（选填）: 接口调用结束的回调函数（调用成功、失败都会执行）
+
+
+3.动态样式组件
+通过className = { judge ? 'class1' : 'class2' }来动态切换样式
+这里的judge可以是一个useState的状态值，也可以是一个函数返回的布尔值 
+在获取接口数据时根据条件动态设置judge值，从而动态设置样式。
+
+另一种做法是直接 {judge === 1 ? (
+  <View className='class1'></View>
+) : (
+  <View className='class2'></View>
+)}
+
+4.
